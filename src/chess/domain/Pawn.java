@@ -8,7 +8,12 @@ import chess.board.Square;
  */
 public class Pawn extends Piece {
 
-    public Pawn(boolean dead, Color color, Square square) {
-        super(dead, color, square);
+    public Pawn(Color color, Square square) {
+        super(color, square);
+    }
+
+    @Override
+    public String toString() {
+        return this.getColor() == Color.WHITE ? "\u2659 " : "\u265F ";
     }
 }

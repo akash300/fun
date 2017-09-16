@@ -8,7 +8,12 @@ import chess.board.Square;
  */
 public class Bishop extends Piece {
 
-    public Bishop(boolean dead, Color color, Square square) {
-        super(dead, color, square);
+    public Bishop(Color color, Square square) {
+        super(color, square);
+    }
+
+    @Override
+    public String toString() {
+        return this.getColor() == Color.WHITE ? "\u2657 " : "\u265D ";
     }
 }

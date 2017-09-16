@@ -8,7 +8,12 @@ import chess.board.Square;
  */
 public class Rook extends Piece {
 
-    public Rook(boolean dead, Color color, Square square) {
-        super(dead, color, square);
+    public Rook(Color color, Square square) {
+        super(color, square);
+    }
+
+    @Override
+    public String toString() {
+        return this.getColor() == Color.WHITE ? "\u2656 " : "\u265C ";
     }
 }

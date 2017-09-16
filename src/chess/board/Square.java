@@ -1,5 +1,6 @@
 package chess.board;
 
+import chess.domain.Color;
 import chess.domain.Piece;
 
 /**
@@ -8,46 +9,40 @@ import chess.domain.Piece;
  */
 public class Square {
 
-    private int row;
-    private int col;
-    private boolean isOccupied;
+    private final Integer row;
+    private final Integer col;
+    private final boolean isOccupied;
+    private final Color color;
     private Piece piece;
 
-    public Square(int row, int col, boolean isOccupied) {
+    public Square(int row, int col, boolean isOccupied, Color color) {
         this.row = row;
         this.col = col;
         this.isOccupied = isOccupied;
+        this.color = color;
     }
 
     public int getRow() {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
     }
 
     public boolean isOccupied() {
         return isOccupied;
     }
 
-    public void setOccupied(boolean occupied) {
-        isOccupied = occupied;
-    }
-
     public Piece getPiece() {
-        return isOccupied() ? piece : null;
+        return piece;
     }
 
     public void setPiece(Piece piece) {
         this.piece = piece;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

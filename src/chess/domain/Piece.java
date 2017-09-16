@@ -12,10 +12,10 @@ public class Piece {
     private final Color color;
     private Square square;
 
-    public Piece(boolean dead, Color color, Square square) {
-        this.dead = dead;
+    public Piece(Color color, Square square) {
         this.color = color;
         this.square = square;
+        square.setPiece(this);
     }
 
     public Square getSquare() {
