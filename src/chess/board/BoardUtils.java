@@ -2,6 +2,8 @@ package chess.board;
 
 import chess.domain.*;
 
+import java.awt.*;
+
 /**
  * @author akashMaurya
  * @Date 16/09/17.
@@ -10,6 +12,8 @@ public class BoardUtils {
 
     private static final Integer MIN = 0;
     private static final Integer MAX = 7;
+
+    private static Board BOARD;
 
     public static boolean isValidSquare(int x, int y) {
         return  (x <= MAX && x >= MIN) && (y <= MAX && y >= MIN);
@@ -23,14 +27,44 @@ public class BoardUtils {
         createBishops(board);
         createKnights(board);
         createPawns(board);
+        BOARD = board;
         return board;
+    }
+
+    public static Board getBoard(){
+        return BOARD;
+    }
+
+    public static Square getNextSquare(Square currentSquare, int x, int y) {
+        int newRow = currentSquare.getRow()+x;
+        int newCol = currentSquare.getCol()+y;
+        Square newSquare = BOARD.getSquare(newRow, newCol);
+        if (newSquare == null) {
+            return null;
+        }
+        final Piece piece = newSquare.getPiece();
+        if (piece == null) {
+            return newSquare;
+        }
+        if (piece.getColor() != currentSquare.getPiece().getColor()) {
+            return newSquare;
+        }
+        return null;
+    }
+
+    public static void resetSquareColors() {
+        for (int i= MIN; i<= MAX; i++) {
+            for (int j= MIN; j <= MAX; j++) {
+                BOARD.getSquare(i, j).setBackground((i+j)%2 == 0 ? Color.WHITE : Color.LIGHT_GRAY);
+            }
+        }
     }
 
     private static Square[][] initializeSquares() {
         Square[][] squares = new Square[MAX+1][MAX+1];
         for (int i= MIN; i<= MAX; i++) {
             for (int j= MIN; j <= MAX; j++) {
-                squares[i][j] = new Square(i, j, false, (i+j)%2 == 0 ? Color.WHITE : Color.BLACK);
+                squares[i][j] = new Square(i, j, (i+j)%2 == 0 ? Color.WHITE : Color.LIGHT_GRAY);
             }
         }
         return squares;
@@ -76,7 +110,7 @@ public class BoardUtils {
         }
 
         for (int i= MIN; i <= MAX; i++) {
-            Pawn pawn = new Pawn(Color.WHITE, board.getSquare(6, i));
+            Pawn pawn = new Pawn(Color.BLACK, board.getSquare(6, i));
         }
     }
 }
