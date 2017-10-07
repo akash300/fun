@@ -23,8 +23,8 @@ public class King extends Piece {
     }
 
     @Override
-    public String getLabel() {
-        return "KING";
+    public PieceType getPieceType() {
+        return PieceType.KING;
     }
 
     protected Image getImage() {

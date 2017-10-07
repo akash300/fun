@@ -13,10 +13,13 @@ public abstract class Piece{
     private boolean dead = false;
     private final Color color;
     private Square square;
+    private int direction;
+    private boolean hasMoved = false;
     private final Image imageIcon;
 
     public Piece(Color color, Square square) {
         this.color = color;
+        this.direction = color == Color.WHITE ? 1 : -1;
         this.square = square;
         this.imageIcon = getImage();
         square.setPiece(this);
@@ -46,9 +49,21 @@ public abstract class Piece{
         return imageIcon;
     }
 
+    public int getDirection() {
+        return direction;
+    }
+
+    public boolean hasMoved() {
+        return hasMoved;
+    }
+
+    public void setHasMoved(boolean hasMoved) {
+        this.hasMoved = hasMoved;
+    }
+
     protected abstract Image getImage();
 
-    public abstract String getLabel();
+    public abstract PieceType getPieceType();
 
     public boolean multiSteps() {
         return true;

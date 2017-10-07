@@ -23,8 +23,8 @@ public class Bishop extends Piece{
     }
 
     @Override
-    public String getLabel() {
-        return "BISHOP";
+    public PieceType getPieceType() {
+        return PieceType.BISHOPH;
     }
 
     protected Image getImage() {

@@ -35,10 +35,28 @@ public class BoardUtils {
         return BOARD;
     }
 
-    public static Square getNextSquare(Square currentSquare, int x, int y) {
+    public static Square getLeftCastlingSquare(Color color) {
+        if (Color.WHITE == color) {
+            return BOARD.getSquare(0, 6);
+        }
+        return BOARD.getSquare(7, 6);
+    }
+
+    public static Square getRightCastlingSquare(Color color) {
+        if (Color.WHITE == color) {
+            return BOARD.getSquare(0, 2);
+        }
+        return BOARD.getSquare(7, 2);
+    }
+
+    public static Square getRelativeSquare(Square currentSquare, int x, int y) {
         int newRow = currentSquare.getRow()+x;
         int newCol = currentSquare.getCol()+y;
-        Square newSquare = BOARD.getSquare(newRow, newCol);
+        return BOARD.getSquare(newRow, newCol);
+    }
+
+    public static Square getNextSquareToMove(Square currentSquare, int x, int y) {
+        Square newSquare = getRelativeSquare(currentSquare, x, y);
         if (newSquare == null) {
             return null;
         }

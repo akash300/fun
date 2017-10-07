@@ -23,8 +23,8 @@ public class Queen extends Piece {
     }
 
     @Override
-    public String getLabel() {
-        return "QUEEN";
+    public PieceType getPieceType() {
+        return PieceType.QUEEN;
     }
 
     protected Image getImage() {

@@ -41,7 +41,24 @@ public class Move {
             final Set<Square> possibleSquares = MoveCalculator.getPossibleSquares(sourceSquare);
             if (possibleSquares.contains(square)) {
                 destinationSquare = square;
+                if (MoveCalculator.getCastlingSquares(sourceSquare, sourceSquare.getPiece()).contains(destinationSquare)) {
+                    if (destinationSquare == BoardUtils.getLeftCastlingSquare(sourceSquare.getPiece().getColor())) {
+                        Square rookSquare = BoardUtils.getRelativeSquare(destinationSquare, 0, 1);
+                        Square bishophSquare = BoardUtils.getRelativeSquare(destinationSquare, 0, -1);
+                        bishophSquare.setPiece(rookSquare.getPiece());
+                        bishophSquare.getPiece().setHasMoved(true);
+                        rookSquare.setPiece(null);
+                    } else if (destinationSquare == BoardUtils.getRightCastlingSquare(sourceSquare.getPiece().getColor())) {
+                        Square rookSquare = BoardUtils.getRelativeSquare(destinationSquare, 0, -2);
+                        Square queenSquare = BoardUtils.getRelativeSquare(destinationSquare, 0, 1);
+                        queenSquare.setPiece(rookSquare.getPiece());
+                        queenSquare.getPiece().setHasMoved(true);
+                        rookSquare.setPiece(null);
+                    }
+                }
+
                 destinationSquare.setPiece(sourceSquare.getPiece());
+                destinationSquare.getPiece().setHasMoved(true);
                 sourceSquare.setPiece(null);
             }
         }

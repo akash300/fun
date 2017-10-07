@@ -23,8 +23,8 @@ public class Rook extends Piece {
     }
 
     @Override
-    public String getLabel() {
-        return "ROOK";
+    public PieceType getPieceType() {
+        return PieceType.ROOK;
     }
 
     protected Image getImage() {

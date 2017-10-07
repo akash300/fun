@@ -35,7 +35,7 @@ public class Square extends JButton{
                     final Set<Square> possibleSquares = MoveCalculator.getPossibleSquares((Square) e.getSource());
                     if (AppUtils.isNotEmpty(possibleSquares)) {
                         for (Square possibleSquare : possibleSquares) {
-                            possibleSquare.setBackground(Color.YELLOW);
+                            possibleSquare.setBackground(Color.orange);
                         }
                     }
                 }

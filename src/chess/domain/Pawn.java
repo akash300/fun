@@ -23,8 +23,8 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public String getLabel() {
-        return "PAWN";
+    public PieceType getPieceType() {
+        return PieceType.PAWN;
     }
 
     protected Image getImage() {
