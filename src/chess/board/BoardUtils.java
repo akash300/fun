@@ -20,15 +20,17 @@ public class BoardUtils {
     }
 
     public static Board getInitialBoard(){
-        Board board = new Board(initializeSquares());
-        createKings(board);
-        createQueens(board);
-        createRooks(board);
-        createBishops(board);
-        createKnights(board);
-        createPawns(board);
-        BOARD = board;
-        return board;
+        if (BOARD == null) {
+            Board board = new Board(initializeSquares());
+            createKings(board);
+            createQueens(board);
+            createRooks(board);
+            createBishops(board);
+            createKnights(board);
+            createPawns(board);
+            BOARD = board;
+        }
+        return BOARD;
     }
 
     public static Board getBoard(){
@@ -91,44 +93,62 @@ public class BoardUtils {
     private static void createKings(Board board) {
         King whiteKing = new King(Color.WHITE, board.getSquare(0, 4));
         King blackKing = new King(Color.BLACK, board.getSquare(7, 4));
+        board.getGame().addPiece(whiteKing);
+        board.getGame().addPiece(blackKing);
     }
 
     private static void createQueens(Board board) {
         Queen whiteQueen = new Queen(Color.WHITE, board.getSquare(0, 3));
         Queen blackQueen = new Queen(Color.BLACK, board.getSquare(7, 3));
+        board.getGame().addPiece(whiteQueen);
+        board.getGame().addPiece(blackQueen);
     }
 
     private static void createRooks(Board board) {
         Rook rightWhiteRook = new Rook(Color.WHITE, board.getSquare(0, 7));
         Rook leftWhiteRook = new Rook(Color.WHITE, board.getSquare(0, 0));
+        board.getGame().addPiece(rightWhiteRook);
+        board.getGame().addPiece(leftWhiteRook);
 
         Rook rightBlackRook = new Rook(Color.BLACK, board.getSquare(7, 7));
         Rook leftBlackRook = new Rook(Color.BLACK, board.getSquare(7, 0));
+        board.getGame().addPiece(rightBlackRook);
+        board.getGame().addPiece(leftBlackRook);
     }
 
     private static void createKnights(Board board) {
         Knight rightWhiteKnight = new Knight(Color.WHITE, board.getSquare(0, 1));
         Knight leftWhiteKnight = new Knight(Color.WHITE, board.getSquare(0, 6));
+        board.getGame().addPiece(rightWhiteKnight);
+        board.getGame().addPiece(leftWhiteKnight);
 
         Knight rightBlackKnight = new Knight(Color.BLACK, board.getSquare(7, 1));
         Knight leftBlackKnight = new Knight(Color.BLACK, board.getSquare(7, 6));
+        board.getGame().addPiece(rightBlackKnight);
+        board.getGame().addPiece(leftBlackKnight);
     }
 
     private static void createBishops(Board board) {
         Bishop rightWhiteBishop = new Bishop(Color.WHITE, board.getSquare(0, 2));
         Bishop leftWhiteBishop = new Bishop(Color.WHITE, board.getSquare(0, 5));
+        board.getGame().addPiece(rightWhiteBishop);
+        board.getGame().addPiece(leftWhiteBishop);
 
         Bishop rightBlackBishop = new Bishop(Color.BLACK, board.getSquare(7, 2));
         Bishop leftBlackBishop = new Bishop(Color.BLACK, board.getSquare(7, 5));
+        board.getGame().addPiece(rightBlackBishop);
+        board.getGame().addPiece(leftBlackBishop);
     }
 
     private static void createPawns(Board board) {
         for (int i= MIN; i <= MAX; i++) {
             Pawn pawn = new Pawn(Color.WHITE, board.getSquare(1, i));
+            board.getGame().addPiece(pawn);
         }
 
         for (int i= MIN; i <= MAX; i++) {
             Pawn pawn = new Pawn(Color.BLACK, board.getSquare(6, i));
+            board.getGame().addPiece(pawn);
         }
     }
 }

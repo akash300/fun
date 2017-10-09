@@ -8,6 +8,5 @@ public class ChessMain {
 
     public static void main(String[] args) {
         final Board initialBoard = BoardUtils.getInitialBoard();
-        initialBoard.printBoard();
     }
 }

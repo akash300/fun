@@ -1,12 +1,10 @@
 package chess.board;
 
+import chess.MoveListener;
 import chess.domain.Piece;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Set;
 
 /**
  * @author akashMaurya
@@ -26,21 +24,7 @@ public class Square extends JButton{
         this.setOpaque(true);
         this.setBackground(color);
         this.setBorderPainted(false);
-        this.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                final boolean showPossibleMoves = Move.move((Square) e.getSource());
-                BoardUtils.resetSquareColors();
-                if (showPossibleMoves) {
-                    final Set<Square> possibleSquares = MoveCalculator.getPossibleSquares((Square) e.getSource());
-                    if (AppUtils.isNotEmpty(possibleSquares)) {
-                        for (Square possibleSquare : possibleSquares) {
-                            possibleSquare.setBackground(Color.orange);
-                        }
-                    }
-                }
-            }
-        });
+        this.addActionListener(MoveListener.getMoveListener());
     }
 
     public int getRow() {
@@ -58,6 +42,7 @@ public class Square extends JButton{
     public void setPiece(Piece piece) {
         this.piece = piece;
         if (piece != null) {
+            piece.setSquare(this);
             this.setIcon(new ImageIcon(piece.getImageIcon()));
         } else {
             this.setIcon(null);

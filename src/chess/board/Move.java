@@ -27,16 +27,21 @@ public class Move {
         return INSTANCE;
     }
 
-    public static boolean move(Square square) {
+    public static MoveState getMoveState() {
+        return sourceSquare != null ? MoveState.PARTIAL : MoveState.COMPLETE;
+    }
+
+    public static MoveState move(Square square) {
         if (sourceSquare == null) {
             if (square.getPiece() == null) {
-                return true;
+                return MoveState.INCORRECT;
             }
             sourceSquare = square;
             square.setBackground(Color.YELLOW);
-            return true;
+            return MoveState.PARTIAL;
         }
 
+        MoveState moveState = null;
         if (square != sourceSquare) {
             final Set<Square> possibleSquares = MoveCalculator.getPossibleSquares(sourceSquare);
             if (possibleSquares.contains(square)) {
@@ -57,13 +62,21 @@ public class Move {
                     }
                 }
 
+                if (destinationSquare.getPiece() != null) {
+                    destinationSquare.getPiece().setDead(true);
+                }
                 destinationSquare.setPiece(sourceSquare.getPiece());
                 destinationSquare.getPiece().setHasMoved(true);
                 sourceSquare.setPiece(null);
+                moveState = MoveState.COMPLETE;
+            } else {
+                moveState = MoveState.INCORRECT;
             }
+        } else {
+            moveState = MoveState.ABORTED;
         }
         reset();
-        return false;
+        return moveState;
     }
 
     public static void reset() {

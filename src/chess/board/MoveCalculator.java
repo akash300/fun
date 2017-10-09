@@ -117,10 +117,7 @@ public class MoveCalculator {
         if (!isAttackMove(source, nextSquare) || PieceType.PAWN != source.getPiece().getPieceType()) {
             squares.add(nextSquare);
         }
-        if (isAttackMove(source, nextSquare)) {
-            return true;
-        }
-        return false;
+        return isAttackMove(source, nextSquare);
     }
 
     private static void addNullSafe(Square square, Set<Square> squares) {
