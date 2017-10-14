@@ -14,8 +14,8 @@ public class Board extends JFrame{
 
     public Board(Square[][] squares) {
         this.squares = squares;
-        this.setLayout(new GridLayout(8,8));
-        for (int i=0 ;i <8; i++) {
+        this.setLayout(new GridLayout(9,8));
+        for (int i=0 ;i <9; i++) {
             for (int j=0; j<8; j++) {
                 this.add(squares[i][j]);
             }
@@ -30,6 +30,10 @@ public class Board extends JFrame{
             return squares[x][y];
         }
         return null;
+    }
+
+    public Square getScoreSquare() {
+        return squares[8][0];
     }
 
     public Game getGame() {

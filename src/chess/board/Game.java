@@ -14,10 +14,9 @@ import java.util.List;
 
 public class Game {
 
-    private Map<PieceType, List<Piece>> whitePiecesMap;
-    private Map<PieceType, List<Piece>> blackPiecesMap;
+    private Map<PieceType, List<Piece>> whitePiecesMap = new HashMap<>();
+    private Map<PieceType, List<Piece>> blackPiecesMap = new HashMap<>();
     private Color turn = Color.WHITE;
-    private boolean isCheckState = false;
 
     public Game() {
     }
@@ -27,25 +26,9 @@ public class Game {
             return;
         }
         if (Color.WHITE == piece.getColor()) {
-            if (whitePiecesMap == null) {
-                whitePiecesMap = new HashMap<>(16);
-            }
-            List<Piece> pieces = whitePiecesMap.get(piece.getPieceType());
-            if (pieces == null) {
-                pieces = new ArrayList<>();
-            }
-            pieces.add(piece);
-            whitePiecesMap.put(piece.getPieceType(), pieces);
+            addPieceToMap(whitePiecesMap, piece);
         } else {
-            if (blackPiecesMap == null) {
-                blackPiecesMap = new HashMap<>(16);
-            }
-            List<Piece> pieces = blackPiecesMap.get(piece.getPieceType());
-            if (pieces == null) {
-                pieces = new ArrayList<>();
-            }
-            pieces.add(piece);
-            blackPiecesMap.put(piece.getPieceType(), pieces);
+            addPieceToMap(blackPiecesMap, piece);
         }
     }
 
@@ -73,11 +56,23 @@ public class Game {
         }
     }
 
-    public boolean isCheckState() {
-        final Collection<List<Piece>> availablePieces = turn == Color.WHITE ? whitePiecesMap.values() : blackPiecesMap.values();
+    public void addPieceToMap(Map<PieceType, List<Piece>> map, Piece piece) {
+        if (map == null) {
+            map = new HashMap<>(32);
+        }
+        List<Piece> pieces = map.get(piece.getPieceType());
+        if (pieces == null) {
+            pieces = new ArrayList<>();
+        }
+        pieces.add(piece);
+        map.put(piece.getPieceType(), pieces);
+    }
 
-        final Square kingSquare = getKingSquare();
-        for (List<Piece> pieceList : availablePieces) {
+    public boolean isCheckState(Color color) {
+        final Collection<List<Piece>> oppositePieces = color == Color.BLACK ? whitePiecesMap.values() : blackPiecesMap.values();
+
+        final Square kingSquare = getKingSquare(color);
+        for (List<Piece> pieceList : oppositePieces) {
             for (Piece piece : pieceList) {
                 if (piece.isDead()) {
                     continue;
@@ -91,8 +86,47 @@ public class Game {
         return false;
     }
 
-    public Square getKingSquare() {
-        return turn == Color.WHITE ? blackPiecesMap.get(PieceType.KING).iterator().next().getSquare() :
+    public boolean isCheckMate(Color color, Square kingSquare) {
+
+        Set<Square> destinationSquares = MoveCalculator.getPossibleSquares(kingSquare);
+        for (Square destinationSquare : destinationSquares) {
+            Piece piece = destinationSquare.getPiece();
+            destinationSquare.setPiece(kingSquare.getPiece());
+            kingSquare.setPiece(null);
+            final boolean checkState = isCheckState(color);
+
+            //Revert the state
+            kingSquare.setPiece(destinationSquare.getPiece());
+            destinationSquare.setPiece(piece);
+
+            if (!checkState) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public Square getKingSquare(Color color) {
+        return color == Color.BLACK ? blackPiecesMap.get(PieceType.KING).iterator().next().getSquare() :
                 whitePiecesMap.get(PieceType.KING).iterator().next().getSquare();
+    }
+
+    public int gameValue() {
+        return gameValueForMap(whitePiecesMap) - gameValueForMap(blackPiecesMap);
+    }
+
+    private int gameValueForMap(Map<PieceType, List<Piece>> map) {
+        int value = 0;
+        for (Map.Entry<PieceType, List<Piece>> entry : map.entrySet()) {
+            int pieceValue = entry.getKey().getValue();
+            final List<Piece> pieces = entry.getValue();
+            for (Piece piece : pieces) {
+                if (!piece.isDead()) {
+                    value = value + pieceValue;
+                }
+            }
+        }
+        return value;
     }
 }

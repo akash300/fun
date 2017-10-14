@@ -80,12 +80,20 @@ public class BoardUtils {
         }
     }
 
+    public static Color reverse(Color color) {
+        return color == Color.black ? Color.WHITE : Color.BLACK;
+    }
+
     private static Square[][] initializeSquares() {
-        Square[][] squares = new Square[MAX+1][MAX+1];
+        Square[][] squares = new Square[MAX+2][MAX+1];
         for (int i= MIN; i<= MAX; i++) {
             for (int j= MIN; j <= MAX; j++) {
                 squares[i][j] = new Square(i, j, (i+j)%2 == 0 ? Color.WHITE : Color.LIGHT_GRAY);
             }
+        }
+
+        for (int j= MIN; j<= MAX; j++) {
+            squares[MAX+1][j] = new Square(MAX+1, j, Color.YELLOW);
         }
         return squares;
     }

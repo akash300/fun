@@ -23,7 +23,8 @@ public class Square extends JButton{
         this.color = color;
         this.setOpaque(true);
         this.setBackground(color);
-        this.setBorderPainted(false);
+        this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        this.setBorderPainted(true);
         this.addActionListener(MoveListener.getMoveListener());
     }
 

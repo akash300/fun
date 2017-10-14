@@ -1,5 +1,7 @@
 package chess.board;
 
+import chess.domain.Piece;
+
 import java.awt.*;
 import java.util.Set;
 
@@ -31,7 +33,7 @@ public class Move {
         return sourceSquare != null ? MoveState.PARTIAL : MoveState.COMPLETE;
     }
 
-    public static MoveState move(Square square) {
+    public static MoveState move(Game game, Square square) {
         if (sourceSquare == null) {
             if (square.getPiece() == null) {
                 return MoveState.INCORRECT;
@@ -62,13 +64,28 @@ public class Move {
                     }
                 }
 
+                MoveContext moveContext = new MoveContext(sourceSquare.getPiece(), destinationSquare.getPiece(),
+                        sourceSquare.getPiece().hasMoved(), sourceSquare.getPiece().getColor());
+
                 if (destinationSquare.getPiece() != null) {
                     destinationSquare.getPiece().setDead(true);
                 }
                 destinationSquare.setPiece(sourceSquare.getPiece());
                 destinationSquare.getPiece().setHasMoved(true);
                 sourceSquare.setPiece(null);
-                moveState = MoveState.COMPLETE;
+                Color reverse = BoardUtils.reverse(moveContext.getColor());
+                if (game.isCheckState(moveContext.getColor())) {
+                    sourceSquare.setPiece(moveContext.getSourcePiece());
+                    sourceSquare.getPiece().setHasMoved(moveContext.getSourcePieceMoved());
+                    destinationSquare.setPiece(moveContext.getDestinationPiece());
+                    if (destinationSquare.getPiece() != null) {
+                        destinationSquare.getPiece().setDead(false);
+                    }
+                    game.getKingSquare(reverse).setBackground(Color.RED);
+                    moveState = MoveState.INCORRECT;
+                } else {
+                    moveState = MoveState.COMPLETE;
+                }
             } else {
                 moveState = MoveState.INCORRECT;
             }
@@ -83,6 +100,37 @@ public class Move {
         sourceSquare.setBackground(sourceSquare.getColor());
         sourceSquare = null;
         destinationSquare = null;
+    }
+
+    private static class MoveContext {
+
+        private final Piece sourcePiece;
+        private final Piece destinationPiece;
+        private final boolean sourcePieceMoved;
+        private final Color color;
+
+        public MoveContext(Piece sourcePiece, Piece destinationPiece, Boolean sourcePieceMoved, Color color) {
+            this.sourcePiece = sourcePiece;
+            this.destinationPiece = destinationPiece;
+            this.sourcePieceMoved = sourcePieceMoved;
+            this.color = color;
+        }
+
+        public Piece getSourcePiece() {
+            return sourcePiece;
+        }
+
+        public boolean getSourcePieceMoved() {
+            return sourcePieceMoved;
+        }
+
+        public Piece getDestinationPiece() {
+            return destinationPiece;
+        }
+
+        public Color getColor() {
+            return color;
+        }
     }
 
 }
