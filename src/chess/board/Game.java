@@ -44,10 +44,6 @@ public class Game {
         return turn;
     }
 
-    public void setTurn(Color turn) {
-        this.turn = turn;
-    }
-
     public void changeTurn() {
         if (turn == Color.WHITE) {
             turn = Color.BLACK;

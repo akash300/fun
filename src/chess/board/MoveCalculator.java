@@ -16,6 +16,9 @@ public class MoveCalculator {
     public static Set<Square> getPossibleSquares(Square source) {
         Piece piece = source.getPiece();
         Set<Square> squares = new HashSet<>();
+        if (piece == null) {
+            return new HashSet<>();
+        }
         int size = getSize(piece);
         if (piece.straight()) {
 
@@ -86,6 +89,10 @@ public class MoveCalculator {
     }
 
     public static Set<Square> getCastlingSquares(Square sourceSquare, Piece piece) {
+
+        if (piece == null) {
+            return new HashSet<>();
+        }
 
         Set<Square> castlingMoves = new HashSet<>();
         if (!piece.hasMoved()) {

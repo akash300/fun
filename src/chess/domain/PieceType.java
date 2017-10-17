@@ -5,7 +5,7 @@ package chess.domain;
  * @Date 08/10/17.
  */
 public enum PieceType {
-    KING(Integer.MAX_VALUE),
+    KING(1000),
     QUEEN(10),
     ROOK(5),
     BISHOPH(3),

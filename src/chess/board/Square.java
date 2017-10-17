@@ -44,9 +44,13 @@ public class Square extends JButton{
         this.piece = piece;
         if (piece != null) {
             piece.setSquare(this);
-            this.setIcon(new ImageIcon(piece.getImageIcon()));
+            if (!GameMove.isAutoMation()) {
+                this.setIcon(new ImageIcon(piece.getImageIcon()));
+            }
         } else {
-            this.setIcon(null);
+            if (!GameMove.isAutoMation()) {
+                this.setIcon(null);
+            }
         }
     }
 

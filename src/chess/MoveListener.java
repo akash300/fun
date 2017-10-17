@@ -1,5 +1,6 @@
 package chess;
 
+import chess.ai.BestMoveCalcultor;
 import chess.board.*;
 import chess.domain.Piece;
 
@@ -30,17 +31,21 @@ public class MoveListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         final Square source = (Square) e.getSource();
+        performMove(source);
+    }
+
+    public void performMove(Square source) {
         if (source.getPiece() != null) {
             final Piece piece = source.getPiece();
-            if (piece.getColor() != getBoard().getGame().getTurn() && Move.getMoveState() != MoveState.PARTIAL) {
+            if (piece.getColor() != getBoard().getGame().getTurn() && GameMove.getMoveState() != MoveState.PARTIAL) {
                 return;
             }
         }
-        final MoveState moveState = Move.move(board.getGame(), source);
+        final MoveState moveState = GameMove.move(getBoard().getGame(), source);
         BoardUtils.resetSquareColors();
         final boolean checkStateBlack = getBoard().getGame().isCheckState(Color.BLACK);
         if (checkStateBlack) {
-            final Square kingSquare = board.getGame().getKingSquare(Color.BLACK);
+            final Square kingSquare = getBoard().getGame().getKingSquare(Color.BLACK);
             kingSquare.setBackground(Color.RED);
             kingSquare.getPiece().setHasMoved(true);
             if (getBoard().getGame().isCheckMate(Color.BLACK, kingSquare)) {
@@ -51,7 +56,7 @@ public class MoveListener implements ActionListener {
 
         final boolean checkStateWhite = getBoard().getGame().isCheckState(Color.WHITE);
         if (checkStateWhite) {
-            final Square kingSquare = board.getGame().getKingSquare(Color.WHITE);
+            final Square kingSquare = getBoard().getGame().getKingSquare(Color.WHITE);
             kingSquare.setBackground(Color.RED);
             kingSquare.getPiece().setHasMoved(true);
             if (getBoard().getGame().isCheckMate(Color.WHITE, kingSquare)) {
@@ -67,9 +72,18 @@ public class MoveListener implements ActionListener {
             }
         } else if (moveState == MoveState.COMPLETE) {
             //Move is complete
-            board.getScoreSquare().setText(String.valueOf(board.getGame().gameValue()));
-            board.getGame().changeTurn();
+            getBoard().getScoreSquare().setText(String.valueOf(board.getGame().gameValue()));
+            getBoard().getGame().changeTurn();
+
+            getBoard().paint();
+            if (getBoard().getGame().getTurn() == Color.WHITE) {
+                BestMoveCalcultor.play(getBoard(), Color.WHITE, BestMoveCalcultor.MAX_DEPTH);
+                getBoard().paint();
+            }
+
         }
+
+
     }
 
     private Board getBoard() {

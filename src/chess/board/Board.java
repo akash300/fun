@@ -39,4 +39,22 @@ public class Board extends JFrame{
     public Game getGame() {
         return game;
     }
+
+    public void printBoard() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (squares[i][j].getPiece() == null) {
+                    System.out.print("X ");
+                } else {
+                    System.out.print(squares[i][j].getPiece().toString());
+                }
+            }
+            System.out.println("\n");
+        }
+    }
+
+    public void paint() {
+        this.repaint();
+    }
+
 }
